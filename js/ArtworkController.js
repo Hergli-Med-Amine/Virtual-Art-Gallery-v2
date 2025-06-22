@@ -186,7 +186,7 @@ export class ArtworkController {
                 </div>
                 <div style="margin: 5px 0; display: flex; align-items: center; gap: 10px;">
                     <label style="width: 20px;">Y:</label>
-                    <input type="range" id="rot-y" min="-180" max="180" step="0.1" style="flex: 1;">
+                    <input type="range" id="rot-y" min="-360" max="360" step="0.1" style="flex: 1;">
                     <input type="number" id="rot-y-input" step="0.1" style="width: 60px; padding: 2px;">
                     <span id="rot-y-value" style="width: 40px; text-align: right;">0°</span>
                 </div>
