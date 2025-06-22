@@ -1,22 +1,28 @@
 // Interactive artwork positioning controller
 import * as THREE from 'three';
 
-export class ArtworkController {    constructor(scene, camera, renderer, artLoader) {
+export class ArtworkController {
+    constructor(scene, camera, renderer, artLoader) {
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
         this.artLoader = artLoader;
-          this.raycaster = new THREE.Raycaster();
+
+        this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
         this.selectedArtwork = null;
         this.controlPanel = null;
-        
+        this.inspectionMode = null;  // Reference to inspection mode
         // Mode control: false = inspection mode, true = positioning mode
         this.isPositioningMode = false;
-        
+
+        console.log(`🎮 ArtworkController initialized - starting in ${this.isPositioningMode ? 'Positioning' : 'Inspection'} mode`);
+
         this.setupEventListeners();
-        this.createControlPanel();
-    }    // Check if positioning mode is active
+            this.createControlPanel();
+        
+    }
+    // Check if positioning mode is active
     get isPositioning() {
         return this.selectedArtwork !== null && this.isPositioningMode;
     }
@@ -25,36 +31,106 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
     togglePositioningMode() {
         this.isPositioningMode = !this.isPositioningMode;
         this.updateModeButton();
-        
+
         // Deselect any currently selected artwork when switching modes
         if (this.selectedArtwork) {
             this.deselectArtwork();
         }
-        
+
         console.log(`Mode switched to: ${this.isPositioningMode ? 'Positioning' : 'Inspection'}`);
         return this.isPositioningMode;
     }
-
     // Get current mode as string
     getCurrentMode() {
         return this.isPositioningMode ? 'Positioning' : 'Inspection';
     }
 
+    // Set the inspection mode reference
+    setInspectionMode(inspectionMode) {
+        this.inspectionMode = inspectionMode;
+    }
+
     setupEventListeners() {
-        // Mouse click event for selecting artworks - now enabled based on mode
+        // Mouse click event for handling both positioning and inspection
         this.renderer.domElement.addEventListener('click', (event) => {
+            console.log(`🎯 Canvas clicked - isPositioningMode: ${this.isPositioningMode}`);
+
             if (this.isPositioningMode) {
+                // In positioning mode - handle positioning clicks
+                console.log('📍 Calling positioning click handler');
                 this.onMouseClick(event);
+            } else {
+                // In inspection mode - delegate to inspection mode if available
+                console.log('🔍 Calling inspection click handler');
+                if (this.inspectionMode && !this.inspectionMode.isActive) {
+                    this.handleInspectionClick(event);
+                } else if (!this.inspectionMode) {
+                    console.log('❌ No inspection mode reference available');
+                } else if (this.inspectionMode.isActive) {
+                    console.log('❌ Inspection mode is already active');
+                }
             }
-            // If not positioning mode, inspector will handle the click
         });
-        
+
         // Escape key to deselect
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Escape') {
                 this.deselectArtwork();
             }
         });
+    }
+
+    handleInspectionClick(event) {
+        // Calculate mouse position in normalized device coordinates
+        const rect = this.renderer.domElement.getBoundingClientRect();
+        this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        // Update raycaster
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+
+        // Get all artwork objects
+        const artworkObjects = [];
+        this.artLoader.artworks.forEach(artwork => {
+            artworkObjects.push(artwork.object);
+        });
+        this.artLoader.sculptures.forEach(sculpture => {
+            artworkObjects.push(sculpture.object);
+        });
+
+        // Check for intersections
+        const intersects = this.raycaster.intersectObjects(artworkObjects, true);
+
+        if (intersects.length > 0) {
+            const clickedObject = intersects[0].object;
+
+            // Find the artwork data
+            let artworkData = null;
+
+            // Check paintings
+            for (let artwork of this.artLoader.artworks) {
+                if (artwork.object === clickedObject) {
+                    artworkData = artwork;
+                    break;
+                }
+            }
+
+            // Check sculptures
+            if (!artworkData) {
+                for (let sculpture of this.artLoader.sculptures) {
+                    if (sculpture.object === clickedObject ||
+                        sculpture.object.children.includes(clickedObject)) {
+                        artworkData = sculpture;
+                        break;
+                    }
+                }
+            } if (artworkData && this.inspectionMode) {
+                console.log('🔍 In inspection mode - entering inspection for:', artworkData.data.title);
+                console.log('🔍 Making sure positioning panel is hidden');
+                this.hideControlPanel(); // Ensure positioning panel is hidden
+                this.inspectionMode.enter(artworkData);
+            }
+        }
     }
 
     onMouseClick(event) {
@@ -82,7 +158,7 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
             // Find the artwork data for the clicked object
             let clickedArtwork = null;
             const clickedObject = intersects[0].object;
-            
+
             // Check if it's a painting
             for (let artwork of this.artLoader.artworks) {
                 if (artwork.object === clickedObject || artwork.object.children.includes(clickedObject)) {
@@ -90,7 +166,7 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
                     break;
                 }
             }
-            
+
             // Check if it's a sculpture
             if (!clickedArtwork) {
                 for (let sculpture of this.artLoader.sculptures) {
@@ -107,23 +183,28 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
         } else {
             this.deselectArtwork();
         }
-    }
+    } selectArtwork(artwork) {
+        // Only allow artwork selection in positioning mode
+        if (!this.isPositioningMode) {
+            console.log('❌ Cannot select artwork - not in positioning mode');
+            return;
+        }
 
-    selectArtwork(artwork) {
         this.selectedArtwork = artwork;
         this.showControlPanel(artwork);
-        
+
         // Add visual indicator (optional - you can customize this)
         this.addSelectionIndicator(artwork.object);
-        
-        console.log('Selected artwork:', artwork.data.title);
-    }
 
-    deselectArtwork() {
+        console.log('Selected artwork:', artwork.data.title);
+    }    deselectArtwork() {
         if (this.selectedArtwork) {
             this.removeSelectionIndicator();
             this.selectedArtwork = null;
-            this.hideControlPanel();
+            // Only hide control panel if we're in positioning mode
+            if (this.isPositioningMode) {
+                this.hideControlPanel();
+            }
             console.log('Deselected artwork');
         }
     }
@@ -131,12 +212,12 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
     addSelectionIndicator(object) {
         // Remove previous indicator
         this.removeSelectionIndicator();
-        
+
         // Create a wireframe box around the selected object
         const box = new THREE.Box3().setFromObject(object);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
-        
+
         const geometry = new THREE.BoxGeometry(size.x * 1.1, size.y * 1.1, size.z * 1.1);
         const material = new THREE.MeshBasicMaterial({
             color: 0x00ff00,
@@ -144,7 +225,7 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
             transparent: true,
             opacity: 0.5
         });
-        
+
         this.selectionIndicator = new THREE.Mesh(geometry, material);
         this.selectionIndicator.position.copy(center);
         this.scene.add(this.selectionIndicator);
@@ -155,10 +236,12 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
             this.scene.remove(this.selectionIndicator);
             this.selectionIndicator = null;
         }
-    }    createControlPanel() {
+    }
+
+    createControlPanel() {
         // Create mode toggle button first
         this.createModeToggleButton();
-        
+
         const panel = document.createElement('div');
         panel.id = 'artwork-control-panel';
         panel.style.cssText = `
@@ -263,19 +346,19 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
             transition: all 0.3s ease;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         `;
-        
+
         this.modeButton.addEventListener('click', () => {
             this.togglePositioningMode();
         });
-        
+
         this.modeButton.addEventListener('mouseenter', () => {
             this.modeButton.style.transform = 'scale(1.05)';
         });
-        
+
         this.modeButton.addEventListener('mouseleave', () => {
             this.modeButton.style.transform = 'scale(1)';
         });
-        
+
         document.body.appendChild(this.modeButton);
         this.updateModeButton();
     }
@@ -285,12 +368,14 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
             if (this.isPositioningMode) {
                 this.modeButton.textContent = '🎨 Positioning Mode';
                 this.modeButton.style.background = '#4CAF50';
+                console.log('🔄 Button updated to: Positioning Mode (green)');
             } else {
                 this.modeButton.textContent = '🔍 Inspection Mode';
                 this.modeButton.style.background = '#2196F3';
+                console.log('🔄 Button updated to: Inspection Mode (blue)');
             }
         }
-    }setupSliderListeners() {
+    } setupSliderListeners() {
         const controls = [
             { id: 'pos-x', inputId: 'pos-x-input', property: 'position', axis: 'x', valueId: 'pos-x-value' },
             { id: 'pos-y', inputId: 'pos-y-input', property: 'position', axis: 'y', valueId: 'pos-y-value' },
@@ -304,13 +389,13 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
             const sliderElement = document.getElementById(control.id);
             const inputElement = document.getElementById(control.inputId);
             const valueElement = document.getElementById(control.valueId);
-            
+
             // Slider event listener
             sliderElement.addEventListener('input', (event) => {
                 const value = parseFloat(event.target.value);
                 this.updateArtworkTransform(control, value, inputElement, valueElement);
             });
-            
+
             // Number input event listener
             inputElement.addEventListener('input', (event) => {
                 const value = parseFloat(event.target.value) || 0;
@@ -318,21 +403,21 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
                 sliderElement.value = value;
                 this.updateArtworkTransform(control, value, inputElement, valueElement);
             });
-            
+
             // Handle Enter key and blur for number inputs
             inputElement.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter') {
                     inputElement.blur();
                 }
             });
-            
+
             inputElement.addEventListener('blur', (event) => {
                 const value = parseFloat(event.target.value) || 0;
                 // Clamp value to slider limits
                 const min = parseFloat(sliderElement.min);
                 const max = parseFloat(sliderElement.max);
                 const clampedValue = Math.max(min, Math.min(max, value));
-                
+
                 if (clampedValue !== value) {
                     inputElement.value = clampedValue;
                     sliderElement.value = clampedValue;
@@ -354,35 +439,41 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
 
     updateArtworkTransform(control, value, inputElement, valueElement) {
         if (!this.selectedArtwork) return;
-        
+
         const displayValue = control.isDegrees ? value.toFixed(1) : value.toFixed(3);
-        
+
         // Update display value
         valueElement.textContent = control.isDegrees ? `${displayValue}°` : displayValue;
-        
+
         // Update number input if it wasn't the source of the change
         if (parseFloat(inputElement.value) !== value) {
             inputElement.value = displayValue;
         }
-        
+
         // Apply transformation to artwork
         if (control.property === 'position') {
             this.selectedArtwork.object[control.property][control.axis] = value;
         } else if (control.property === 'rotation') {
             this.selectedArtwork.object[control.property][control.axis] = THREE.MathUtils.degToRad(value);
         }
-        
+
         this.updateJSONDisplay();
-    }    showControlPanel(artwork) {
+    } showControlPanel(artwork) {
+        // Only show control panel in positioning mode
+        if (!this.isPositioningMode) {
+            console.log('❌ Cannot show control panel - not in positioning mode');
+            return;
+        }
+
         this.controlPanel.style.display = 'block';
-        
+
         // Update title
         document.getElementById('artwork-title').textContent = artwork.data.title;
-        
+
         // Update slider and input values
         const pos = artwork.object.position;
         const rot = artwork.object.rotation;
-        
+
         // Position controls
         document.getElementById('pos-x').value = pos.x;
         document.getElementById('pos-x-input').value = pos.x.toFixed(3);
@@ -390,41 +481,42 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
         document.getElementById('pos-y-input').value = pos.y.toFixed(3);
         document.getElementById('pos-z').value = pos.z;
         document.getElementById('pos-z-input').value = pos.z.toFixed(3);
-        
+
         // Rotation controls
         const rotXDeg = THREE.MathUtils.radToDeg(rot.x);
         const rotYDeg = THREE.MathUtils.radToDeg(rot.y);
         const rotZDeg = THREE.MathUtils.radToDeg(rot.z);
-        
+
         document.getElementById('rot-x').value = rotXDeg;
         document.getElementById('rot-x-input').value = rotXDeg.toFixed(1);
         document.getElementById('rot-y').value = rotYDeg;
         document.getElementById('rot-y-input').value = rotYDeg.toFixed(1);
         document.getElementById('rot-z').value = rotZDeg;
         document.getElementById('rot-z-input').value = rotZDeg.toFixed(1);
-        
+
         // Update value displays
         document.getElementById('pos-x-value').textContent = pos.x.toFixed(3);
         document.getElementById('pos-y-value').textContent = pos.y.toFixed(3);
         document.getElementById('pos-z-value').textContent = pos.z.toFixed(3);
-        
+
         document.getElementById('rot-x-value').textContent = `${rotXDeg.toFixed(1)}°`;
         document.getElementById('rot-y-value').textContent = `${rotYDeg.toFixed(1)}°`;
         document.getElementById('rot-z-value').textContent = `${rotZDeg.toFixed(1)}°`;
-        
-        this.updateJSONDisplay();
-    }
 
-    hideControlPanel() {
-        this.controlPanel.style.display = 'none';
+        this.updateJSONDisplay();
+    }    hideControlPanel() {
+        if (this.controlPanel) {
+            this.controlPanel.style.display = 'none';
+            console.log('🚫 Control panel hidden');
+        }
     }
 
     updateJSONDisplay() {
         if (!this.selectedArtwork) return;
-        
+
         const pos = this.selectedArtwork.object.position;
         const rot = this.selectedArtwork.object.rotation;
-        
+
         const jsonData = {
             position: {
                 x: parseFloat(pos.x.toFixed(3)),
@@ -437,7 +529,7 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
                 z: parseFloat(rot.z.toFixed(6))
             }
         };
-        
+
         document.getElementById('json-output').textContent = JSON.stringify(jsonData, null, 2);
     }
 
@@ -445,13 +537,13 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
         const jsonText = document.getElementById('json-output').textContent;
         navigator.clipboard.writeText(jsonText).then(() => {
             console.log('JSON coordinates copied to clipboard!');
-            
+
             // Visual feedback
             const button = document.getElementById('copy-json');
             const originalText = button.textContent;
             button.textContent = 'Copied!';
             button.style.background = '#4CAF50';
-            
+
             setTimeout(() => {
                 button.textContent = originalText;
                 button.style.background = '#4CAF50';
@@ -461,25 +553,25 @@ export class ArtworkController {    constructor(scene, camera, renderer, artLoad
 
     resetArtworkPosition() {
         if (!this.selectedArtwork) return;
-        
+
         // Reset to original position from JSON data
         const originalData = this.selectedArtwork.data;
-        
+
         this.selectedArtwork.object.position.set(
             originalData.position.x,
             originalData.position.y,
             originalData.position.z
         );
-        
+
         this.selectedArtwork.object.rotation.set(
             originalData.rotation.x,
             originalData.rotation.y,
             originalData.rotation.z
         );
-        
+
         // Update the control panel
         this.showControlPanel(this.selectedArtwork);
-        
+
         console.log('Reset artwork to original position');
     }    // Cleanup method
     destroy() {

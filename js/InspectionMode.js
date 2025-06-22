@@ -2,8 +2,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-export class InspectionMode {
-    constructor(renderer, artLoader, sceneManager) {
+export class InspectionMode {    constructor(renderer, artLoader, sceneManager, artworkController) {
         this.isActive = false;
         this.scene = null;
         this.camera = null;
@@ -12,6 +11,7 @@ export class InspectionMode {
         this.renderer = renderer;
         this.artLoader = artLoader;
         this.sceneManager = sceneManager;
+        this.artworkController = artworkController;
         this.onExit = null;
         
         // UI elements
@@ -24,69 +24,15 @@ export class InspectionMode {
         this.mouse = new THREE.Vector2();
         
         this.setupEventListeners();
-    }
-
+    }   
+    
     setupEventListeners() {
-        // Listen for artwork clicks
-        this.renderer.domElement.addEventListener('click', (event) => {
-            if (!this.isActive) {
-                this.handleArtworkClick(event);
-            }
-        });        // Listen for escape key
+        // Only listen for escape key - let ArtworkController handle clicks
         document.addEventListener('keydown', (event) => {
             if (this.isActive && event.code === 'Escape') {
                 this.exit();
             }
-        });
-    }
-
-    handleArtworkClick(event) {
-        // Calculate mouse position
-        const rect = this.renderer.domElement.getBoundingClientRect();
-        this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-        this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;        // Cast ray from camera
-        this.raycaster.setFromCamera(this.mouse, this.sceneManager.camera);
-
-        // Get all artwork objects
-        const artworkObjects = [];
-        this.artLoader.artworks.forEach(artwork => {
-            artworkObjects.push(artwork.object);
-        });
-        this.artLoader.sculptures.forEach(sculpture => {
-            artworkObjects.push(sculpture.object);
-        });
-
-        const intersects = this.raycaster.intersectObjects(artworkObjects, true);
-
-        if (intersects.length > 0) {
-            const clickedObject = intersects[0].object;
-            
-            // Find the artwork data
-            let artworkData = null;
-            
-            // Check paintings
-            for (let artwork of this.artLoader.artworks) {
-                if (artwork.object === clickedObject) {
-                    artworkData = artwork;
-                    break;
-                }
-            }
-            
-            // Check sculptures
-            if (!artworkData) {
-                for (let sculpture of this.artLoader.sculptures) {
-                    if (sculpture.object === clickedObject || 
-                        sculpture.object.children.includes(clickedObject)) {
-                        artworkData = sculpture;
-                        break;
-                    }
-                }
-            }
-
-            if (artworkData) {
-                this.enter(artworkData);
-            }
-        }    }
+        });    }
 
     enter(artworkData) {
         this.isActive = true;
@@ -324,10 +270,12 @@ export class InspectionMode {
         group.add(painting);    // Front artwork (most forward)
 
         return group;
-    }    createInspectionSculpture(artworkData) {
+    }    
+    
+    createInspectionSculpture(artworkData) {
         // Clone the sculpture and apply the scale from JSON data
         const sculpture = artworkData.object.clone();
-        sculpture.position.set(0, 0, 0);
+        sculpture.position.set(0, -2, 0);
         sculpture.rotation.set(0, 0, 0);
         
         // Use the scale from the sculpture's JSON data if available
@@ -342,7 +290,9 @@ export class InspectionMode {
         }
         
         return sculpture;
-    }    createInspectionUI() {
+    }    
+    
+    createInspectionUI() {
         // Main container
         this.inspectionUI = document.createElement('div');
         this.inspectionUI.className = 'inspection-ui';
@@ -368,7 +318,9 @@ export class InspectionMode {
         exitButton.innerHTML = '✕';
         exitButton.addEventListener('click', () => this.exit());
         this.inspectionUI.appendChild(exitButton);
-    }    updateInfoPanel() {
+    }   
+    
+    updateInfoPanel() {
         if (!this.infoPanel || !this.currentArtworkData) return;
 
         const data = this.currentArtworkData.data;
@@ -409,6 +361,11 @@ export class InspectionMode {
 
         // Show main gallery controls when exiting inspection
         this.showGalleryControls();
+
+        // Deselect any artwork in positioning mode
+        if (this.artworkController && this.artworkController.selectedArtwork) {
+            this.artworkController.deselectArtwork();
+        }
 
         // Remove UI
         if (this.inspectionUI) {
@@ -452,9 +409,7 @@ export class InspectionMode {
         if (this.isActive) {
             this.exit();
         }
-    }
-
-    hideGalleryControls() {
+    }    hideGalleryControls() {
         const controlsElement = document.getElementById('controls');
         const statsElement = document.getElementById('stats');
         
@@ -463,6 +418,16 @@ export class InspectionMode {
         }
         if (statsElement) {
             statsElement.style.display = 'none';
+        }
+
+        // Hide the artwork controller's control panel (positioning panel)
+        if (this.artworkController && this.artworkController.controlPanel) {
+            this.artworkController.controlPanel.style.display = 'none';
+        }
+        
+        // Hide the mode toggle button during inspection
+        if (this.artworkController && this.artworkController.modeButton) {
+            this.artworkController.modeButton.style.display = 'none';
         }
     }
 
@@ -475,6 +440,19 @@ export class InspectionMode {
         }
         if (statsElement) {
             statsElement.style.display = 'block';
+        }
+
+        // Show the mode toggle button after inspection
+        if (this.artworkController && this.artworkController.modeButton) {
+            this.artworkController.modeButton.style.display = 'block';
+        }
+        
+        // DO NOT show the positioning panel automatically when exiting inspection
+        // Only show it if we're in positioning mode AND have a selected artwork
+        if (this.artworkController && 
+            this.artworkController.isPositioningMode && 
+            this.artworkController.selectedArtwork) {
+            this.artworkController.controlPanel.style.display = 'block';
         }
     }
 }

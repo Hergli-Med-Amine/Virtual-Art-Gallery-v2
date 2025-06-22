@@ -1,28 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Virtual Art Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Art Gallery</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="css/inspection.css">
 </head>
+
 <body>
     <div id="container">
-        <div id="loading">Loading Art Gallery...</div>        <div id="controls">
+        <div id="loading">Loading Art Gallery...</div>
+        <div id="controls">
             <strong>Controls:</strong><br>
             Mouse: Look around<br>
             WASD: Move<br>
             Space: Up<br>
             Shift: Down<br>
-            Scroll: Zoom<br>            <strong style="color: #2196F3;">🔍 Default: Click artwork to inspect</strong><br>
+            Scroll: Zoom<br> 
+            <strong style="color: #2196F3;">🔍 Default: Click artwork to inspect</strong><br>
             <strong style="color: #4CAF50;">🎨 Toggle mode to position artworks</strong><br>
             <strong style="color: #FF5722;">ESC: Deselect/Exit</strong>
-        </div><div id="stats">
+        </div>
+        <div id="stats">
             <div id="fps">FPS: --</div>
             <div id="triangles">Triangles: --</div>
-        </div></div>
+        </div>
+    </div>
 
     <!-- Main script -->
     <script type="module" src="script.js"></script>
 </body>
+
 </html>

@@ -46,13 +46,16 @@ class VirtualArtGallery {
                 this.sceneManager.camera,
                 this.sceneManager.renderer,
                 this.artLoader
-            );
-              // Initialize inspection mode for detailed viewing
+            );            // Initialize inspection mode for detailed viewing
             this.inspectionMode = new InspectionMode(
                 this.sceneManager.renderer,
                 this.artLoader,
-                this.sceneManager
+                this.sceneManager,
+                this.artworkController
             );
+
+            // Set up bidirectional reference
+            this.artworkController.setInspectionMode(this.inspectionMode);
               // Load all content
             console.log('Loading gallery model...');
             await this.artLoader.loadGallery();
@@ -70,7 +73,9 @@ class VirtualArtGallery {
             console.error('Error initializing gallery:', error);
             document.getElementById('loading').innerHTML = '<p>Error loading gallery. Please refresh.</p>';
         }
-    }    animate() {
+    }    
+    
+    animate() {
         requestAnimationFrame(() => this.animate());
         
         if (this.isLoading) return;
