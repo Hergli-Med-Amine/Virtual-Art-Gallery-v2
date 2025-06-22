@@ -7,7 +7,7 @@
         "description": "Sculpture personnalisée importée depuis un fichier GLTF pour tester la fonctionnalité.",
         "position": {
             "x": 0,
-            "y": 1,
+            "y": 0.45,
             "z": 0
         },
         "modelUrl": "assets/models/uploads_files_1848883_full_sculpture.gltf",
