@@ -5,6 +5,7 @@ import { MovementController } from './js/MovementController.js';
 import { ArtLoader } from './js/ArtLoader.js';
 import { UIManager } from './js/UIManager.js';
 import { ArtworkController } from './js/ArtworkController.js';
+import { InspectionMode } from './js/InspectionMode.js';
 
 class VirtualArtGallery {
     constructor() {
@@ -13,6 +14,7 @@ class VirtualArtGallery {
         this.artLoader = null;
         this.uiManager = null;
         this.artworkController = null;
+        this.inspectionMode = null;
         this.isLoading = true;
     }
 
@@ -38,14 +40,18 @@ class VirtualArtGallery {
                 this.sceneManager.camera,
                 this.sceneManager.controls
             );
-              this.uiManager = new UIManager();
-            
-            // Initialize artwork controller for interactive positioning
+              this.uiManager = new UIManager();            // Initialize artwork controller for interactive positioning
             this.artworkController = new ArtworkController(
                 this.sceneManager.scene,
                 this.sceneManager.camera,
                 this.sceneManager.renderer,
                 this.artLoader
+            );
+              // Initialize inspection mode for detailed viewing
+            this.inspectionMode = new InspectionMode(
+                this.sceneManager.renderer,
+                this.artLoader,
+                this.sceneManager
             );
               // Load all content
             console.log('Loading gallery model...');
@@ -64,32 +70,39 @@ class VirtualArtGallery {
             console.error('Error initializing gallery:', error);
             document.getElementById('loading').innerHTML = '<p>Error loading gallery. Please refresh.</p>';
         }
-    }
-
-    animate() {
+    }    animate() {
         requestAnimationFrame(() => this.animate());
         
         if (this.isLoading) return;
         
         const deltaTime = this.sceneManager.clock.getDelta();
         const currentTime = performance.now();
-          // Update movement
-        this.movementController.handleMovement(deltaTime);
+          // Check if we're in inspection mode
+        const isInspecting = this.inspectionMode?.isActive || false;
         
-        // Update controls
-        this.sceneManager.controls.update();
-        
-        // Update mixer for animations
-        if (this.artLoader.mixer) {
-            this.artLoader.mixer.update(deltaTime);
+        if (isInspecting) {
+            // Inspection mode - update and render inspection scene
+            this.inspectionMode.update();
+            this.inspectionMode.render();
+        } else {
+            // Normal gallery mode - update movement and render main scene
+            this.movementController.handleMovement(deltaTime);
+            
+            // Update controls
+            this.sceneManager.controls.update();
+            
+            // Update mixer for animations
+            if (this.artLoader.mixer) {
+                this.artLoader.mixer.update(deltaTime);
+            }
+            
+            // Update UI
+            this.uiManager.updateFPS(currentTime);
+            this.uiManager.updateTriangleCount(this.artLoader.gallery);
+            
+            // Render main scene
+            this.sceneManager.renderer.render(this.sceneManager.scene, this.sceneManager.camera);
         }
-        
-        // Update UI
-        this.uiManager.updateFPS(currentTime);
-        this.uiManager.updateTriangleCount(this.artLoader.gallery);
-        
-        // Render
-        this.sceneManager.renderer.render(this.sceneManager.scene, this.sceneManager.camera);
     }
 
     // Public API for external access

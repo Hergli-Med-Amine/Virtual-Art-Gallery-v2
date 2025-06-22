@@ -1,26 +1,52 @@
 // Interactive artwork positioning controller
 import * as THREE from 'three';
 
-export class ArtworkController {
-    constructor(scene, camera, renderer, artLoader) {
+export class ArtworkController {    constructor(scene, camera, renderer, artLoader) {
         this.scene = scene;
         this.camera = camera;
         this.renderer = renderer;
         this.artLoader = artLoader;
-        
-        this.raycaster = new THREE.Raycaster();
+          this.raycaster = new THREE.Raycaster();
         this.mouse = new THREE.Vector2();
         this.selectedArtwork = null;
         this.controlPanel = null;
         
+        // Mode control: false = inspection mode, true = positioning mode
+        this.isPositioningMode = false;
+        
         this.setupEventListeners();
         this.createControlPanel();
+    }    // Check if positioning mode is active
+    get isPositioning() {
+        return this.selectedArtwork !== null && this.isPositioningMode;
+    }
+
+    // Toggle between positioning and inspection modes
+    togglePositioningMode() {
+        this.isPositioningMode = !this.isPositioningMode;
+        this.updateModeButton();
+        
+        // Deselect any currently selected artwork when switching modes
+        if (this.selectedArtwork) {
+            this.deselectArtwork();
+        }
+        
+        console.log(`Mode switched to: ${this.isPositioningMode ? 'Positioning' : 'Inspection'}`);
+        return this.isPositioningMode;
+    }
+
+    // Get current mode as string
+    getCurrentMode() {
+        return this.isPositioningMode ? 'Positioning' : 'Inspection';
     }
 
     setupEventListeners() {
-        // Mouse click event for selecting artworks
+        // Mouse click event for selecting artworks - now enabled based on mode
         this.renderer.domElement.addEventListener('click', (event) => {
-            this.onMouseClick(event);
+            if (this.isPositioningMode) {
+                this.onMouseClick(event);
+            }
+            // If not positioning mode, inspector will handle the click
         });
         
         // Escape key to deselect
@@ -129,9 +155,10 @@ export class ArtworkController {
             this.scene.remove(this.selectionIndicator);
             this.selectionIndicator = null;
         }
-    }
-
-    createControlPanel() {
+    }    createControlPanel() {
+        // Create mode toggle button first
+        this.createModeToggleButton();
+        
         const panel = document.createElement('div');
         panel.id = 'artwork-control-panel';
         panel.style.cssText = `
@@ -214,7 +241,56 @@ export class ArtworkController {
 
         // Setup slider event listeners
         this.setupSliderListeners();
-    }    setupSliderListeners() {
+    }
+
+    createModeToggleButton() {
+        this.modeButton = document.createElement('button');
+        this.modeButton.id = 'mode-toggle-button';
+        this.modeButton.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        `;
+        
+        this.modeButton.addEventListener('click', () => {
+            this.togglePositioningMode();
+        });
+        
+        this.modeButton.addEventListener('mouseenter', () => {
+            this.modeButton.style.transform = 'scale(1.05)';
+        });
+        
+        this.modeButton.addEventListener('mouseleave', () => {
+            this.modeButton.style.transform = 'scale(1)';
+        });
+        
+        document.body.appendChild(this.modeButton);
+        this.updateModeButton();
+    }
+
+    updateModeButton() {
+        if (this.modeButton) {
+            if (this.isPositioningMode) {
+                this.modeButton.textContent = '🎨 Positioning Mode';
+                this.modeButton.style.background = '#4CAF50';
+            } else {
+                this.modeButton.textContent = '🔍 Inspection Mode';
+                this.modeButton.style.background = '#2196F3';
+            }
+        }
+    }setupSliderListeners() {
         const controls = [
             { id: 'pos-x', inputId: 'pos-x-input', property: 'position', axis: 'x', valueId: 'pos-x-value' },
             { id: 'pos-y', inputId: 'pos-y-input', property: 'position', axis: 'y', valueId: 'pos-y-value' },
@@ -405,13 +481,14 @@ export class ArtworkController {
         this.showControlPanel(this.selectedArtwork);
         
         console.log('Reset artwork to original position');
-    }
-
-    // Cleanup method
+    }    // Cleanup method
     destroy() {
         this.removeSelectionIndicator();
         if (this.controlPanel) {
             document.body.removeChild(this.controlPanel);
+        }
+        if (this.modeButton) {
+            document.body.removeChild(this.modeButton);
         }
     }
 }
