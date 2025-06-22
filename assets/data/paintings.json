@@ -53,13 +53,13 @@
         "description": "Estampe japonaise représentant une vague géante menaçant des bateaux, avec le mont Fuji en arrière-plan.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/The_Great_Wave_off_Kanagawa.jpg/1280px-The_Great_Wave_off_Kanagawa.jpg",
         "position": {
-            "x": 0.84,
+            "x": 0.8,
             "y": 1.75,
-            "z": 8.08
+            "z": 8.09
         },
         "rotation": {
             "x": 0,
-            "y": 3.240,
+            "y": 3.24,
             "z": 0
         },
         "scale": {
@@ -76,18 +76,18 @@
         "description": "Œuvre expressionniste représentant une figure angoissée sur un pont, devenue icône de l'anxiété moderne.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/800px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
         "position": {
-            "x": 3.35,
+            "x": 4.73,
             "y": 1.75,
-            "z": 7.4
+            "z": 6.61
         },
         "rotation": {
             "x": 0,
-            "y": -2.715,
+            "y": -2.522001,
             "z": 0
         },
         "scale": {
-            "x": 1.2,
-            "y": 1.6,
+            "x": 0.7,
+            "y": 1.1,
             "z": 1
         }
     },
@@ -99,18 +99,18 @@
         "description": "Peinture cubiste dénonçant les horreurs de la guerre, créée en réaction au bombardement de Guernica.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/PicassoGuernica.jpg/1280px-PicassoGuernica.jpg",
         "position": {
-            "x": 6.6,
+            "x": 7.4,
             "y": 1.75,
-            "z": 4.74
+            "z": 3.35
         },
         "rotation": {
             "x": 0,
-            "y": -2.195,
+            "y": -1.996657,
             "z": 0
         },
         "scale": {
-            "x": 2.5,
-            "y": 1.2,
+            "x": 1.7,
+            "y": 0.5,
             "z": 1
         }
     },
@@ -122,18 +122,18 @@
         "description": "Œuvre révolutionnaire marquant la naissance du cubisme, représentant cinq femmes aux formes géométriques.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Les_Demoiselles_d%27Avignon.jpg/800px-Les_Demoiselles_d%27Avignon.jpg",
         "position": {
-            "x": 8.5,
+            "x": 8.09,
             "y": 1.75,
-            "z": 0
+            "z": -0.79
         },
         "rotation": {
             "x": 0,
-            "y": -1.5708,
+            "y": -1.473058,
             "z": 0
         },
         "scale": {
-            "x": 1.6,
-            "y": 1.8,
+            "x": 0.9,
+            "y": 1.1,
             "z": 1
         }
     },
@@ -155,8 +155,8 @@
             "z": 0
         },
         "scale": {
-            "x": 1.6,
-            "y": 1.6,
+            "x": 1.1,
+            "y": 1.1,
             "z": 1
         }
     },
@@ -168,7 +168,7 @@
         "description": "Peinture iconique américaine représentant un fermier et sa fille devant leur maison dans le style gothique rural.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg/800px-Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg",
         "position": {
-            "x": 3.35,
+            "x": 3.36,
             "y": 1.75,
             "z": -7.4
         },
@@ -178,8 +178,8 @@
             "z": 0
         },
         "scale": {
-            "x": 1.3,
-            "y": 1.7,
+            "x": 0.8,
+            "y": 1.1,
             "z": 1
         }
     },
@@ -191,18 +191,18 @@
         "description": "Œuvre surréaliste célèbre pour ses montres molles, explorant les concepts de temps et de mémoire dans un paysage onirique.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/d/dd/The_Persistence_of_Memory.jpg/1280px-The_Persistence_of_Memory.jpg",
         "position": {
-            "x": 0,
+            "x": -0.8,
             "y": 1.75,
-            "z": -8.5
+            "z": -8.08
         },
         "rotation": {
             "x": 0,
-            "y": 0,
+            "y": 0.099484,
             "z": 0
         },
         "scale": {
-            "x": 1.8,
-            "y": 1.3,
+            "x": 1.6,
+            "y": 1.1,
             "z": 1
         }
     },
@@ -214,18 +214,18 @@
         "description": "Portrait mystérieux d'une jeune fille au turban et à la perle, chef-d'œuvre de la peinture hollandaise du XVIIe siècle.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg",
         "position": {
-            "x": -3.35,
+            "x": -4.74,
             "y": 1.75,
-            "z": -7.4
+            "z": -6.6
         },
         "rotation": {
             "x": 0,
-            "y": 0.427,
+            "y": 0.619592,
             "z": 0
         },
         "scale": {
-            "x": 1.4,
-            "y": 1.6,
+            "x": 0.9,
+            "y": 1.1,
             "z": 1
         }
     },
@@ -237,18 +237,18 @@
         "description": "Série impressionniste emblématique capturant la beauté des nénuphars dans le jardin aquatique de Monet à Giverny.",
         "imageUrl": "assets/images/Water_Lilies_by_Claude_Monet.jpg",
         "position": {
-            "x": -6.6,
+            "x": -7.4,
             "y": 1.75,
-            "z": -4.74
+            "z": -3.35
         },
         "rotation": {
             "x": 0,
-            "y": 0.947,
+            "y": 1.144936,
             "z": 0
         },
         "scale": {
-            "x": 2.4,
-            "y": 1.5,
+            "x": 1.6,
+            "y": 0.7,
             "z": 1
         }
     },
@@ -260,18 +260,18 @@
         "description": "Chef-d'œuvre de l'expressionnisme abstrait américain, créé par la technique du dripping de Pollock, révolutionnant l'art moderne.",
         "imageUrl": "assets/images/Lavender_Mist.jpg",
         "position": {
-            "x": -8.5,
+            "x": -8.09,
             "y": 1.75,
-            "z": 0
+            "z": 0.8
         },
         "rotation": {
             "x": 0,
-            "y": 1.5708,
+            "y": 1.67028,
             "z": 0
         },
         "scale": {
-            "x": 2.6,
-            "y": 1.8,
+            "x": 1.6,
+            "y": 0.8,
             "z": 1
         }
     }
