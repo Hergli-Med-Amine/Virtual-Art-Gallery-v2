@@ -1,0 +1,276 @@
+[
+    {
+        "type": "painting",
+        "title": "La Nuit Étoilée",
+        "artist": "Vincent van Gogh",
+        "year": "1889",
+        "description": "Cette œuvre emblématique de Van Gogh capture le mouvement du ciel nocturne avec des tourbillons expressifs et des couleurs vibrantes.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
+        "position": {
+            "x": -5.9,
+            "y": 2,
+            "z": 3
+        },
+        "rotation": {
+            "x": 0,
+            "y": 1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.5,
+            "y": 1.2,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "La Joconde",
+        "artist": "Léonard de Vinci",
+        "year": "1503-1519",
+        "description": "Portrait de Lisa Gherardini, épouse de Francesco del Giocondo. Célèbre pour son sourire énigmatique et la technique du sfumato.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/687px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
+        "position": {
+            "x": 5.9,
+            "y": 2,
+            "z": 3
+        },
+        "rotation": {
+            "x": 0,
+            "y": -1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.2,
+            "y": 1.6,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "La Grande Vague",
+        "artist": "Katsushika Hokusai",
+        "year": "1831",
+        "description": "Estampe japonaise représentant une vague géante menaçant des bateaux, avec le mont Fuji en arrière-plan.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/The_Great_Wave_off_Kanagawa.jpg/1280px-The_Great_Wave_off_Kanagawa.jpg",
+        "position": {
+            "x": -5.9,
+            "y": 2,
+            "z": 0
+        },
+        "rotation": {
+            "x": 0,
+            "y": 1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 2,
+            "y": 1.4,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "Le Cri",
+        "artist": "Edvard Munch",
+        "year": "1893",
+        "description": "Œuvre expressionniste représentant une figure angoissée sur un pont, devenue icône de l'anxiété moderne.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg/800px-Edvard_Munch%2C_1893%2C_The_Scream%2C_oil%2C_tempera_and_pastel_on_cardboard%2C_91_x_73_cm%2C_National_Gallery_of_Norway.jpg",
+        "position": {
+            "x": 5.9,
+            "y": 2,
+            "z": 0
+        },
+        "rotation": {
+            "x": 0,
+            "y": -1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.2,
+            "y": 1.6,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "Guernica",
+        "artist": "Pablo Picasso",
+        "year": "1937",
+        "description": "Peinture cubiste dénonçant les horreurs de la guerre, créée en réaction au bombardement de Guernica.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/7/74/PicassoGuernica.jpg/1280px-PicassoGuernica.jpg",
+        "position": {
+            "x": -5.9,
+            "y": 2,
+            "z": -3
+        },
+        "rotation": {
+            "x": 0,
+            "y": 1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 2.5,
+            "y": 1.2,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "Les Demoiselles d'Avignon",
+        "artist": "Pablo Picasso",
+        "year": "1907",
+        "description": "Œuvre révolutionnaire marquant la naissance du cubisme, représentant cinq femmes aux formes géométriques.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Les_Demoiselles_d%27Avignon.jpg/800px-Les_Demoiselles_d%27Avignon.jpg",
+        "position": {
+            "x": 5.9,
+            "y": 2,
+            "z": -3
+        },
+        "rotation": {
+            "x": 0,
+            "y": -1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.6,
+            "y": 1.8,
+            "z": 1
+        }
+    },    {
+        "type": "painting",
+        "title": "Composition with Red Blue and Yellow",
+        "artist": "Piet Mondrian",
+        "year": "1930",
+        "description": "Œuvre emblématique de l'art abstrait géométrique, utilisant uniquement des lignes noires, des couleurs primaires et du blanc pour créer un équilibre parfait.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg/800px-Piet_Mondriaan%2C_1930_-_Mondrian_Composition_II_in_Red%2C_Blue%2C_and_Yellow.jpg",
+        "position": {
+            "x": -5.9,
+            "y": 2,
+            "z": -6
+        },
+        "rotation": {
+            "x": 0,
+            "y": 1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.6,
+            "y": 1.6,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "American Gothic",
+        "artist": "Grant Wood",
+        "year": "1930",
+        "description": "Peinture iconique américaine représentant un fermier et sa fille devant leur maison dans le style gothique rural.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg/800px-Grant_Wood_-_American_Gothic_-_Google_Art_Project.jpg",
+        "position": {
+            "x": 5.9,
+            "y": 2,
+            "z": -6
+        },
+        "rotation": {
+            "x": 0,
+            "y": -1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.3,
+            "y": 1.7,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "La Persistance de la mémoire",
+        "artist": "Salvador Dalí",
+        "year": "1931",
+        "description": "Œuvre surréaliste célèbre pour ses montres molles, explorant les concepts de temps et de mémoire dans un paysage onirique.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/d/dd/The_Persistence_of_Memory.jpg/1280px-The_Persistence_of_Memory.jpg",
+        "position": {
+            "x": -5.9,
+            "y": 2,
+            "z": -9
+        },
+        "rotation": {
+            "x": 0,
+            "y": 1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.8,
+            "y": 1.3,
+            "z": 1
+        }
+    },    {
+        "type": "painting",
+        "title": "Girl with a Pearl Earring",
+        "artist": "Johannes Vermeer",
+        "year": "1665",
+        "description": "Portrait mystérieux d'une jeune fille au turban et à la perle, chef-d'œuvre de la peinture hollandaise du XVIIe siècle.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg",
+        "position": {
+            "x": 5.9,
+            "y": 2,
+            "z": -9
+        },
+        "rotation": {
+            "x": 0,
+            "y": -1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 1.4,
+            "y": 1.6,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "Water Lilies",
+        "artist": "Claude Monet",
+        "year": "1919",
+        "description": "Série impressionniste emblématique capturant la beauté des nénuphars dans le jardin aquatique de Monet à Giverny.",
+        "imageUrl": "assets/images/Water_Lilies_by_Claude_Monet.jpg",
+        "position": {
+            "x": -5.9,
+            "y": 2,
+            "z": -12
+        },
+        "rotation": {
+            "x": 0,
+            "y": 1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 2.4,
+            "y": 1.5,
+            "z": 1
+        }
+    },
+    {
+        "type": "painting",
+        "title": "Number 1, 1950 (Lavender Mist)",
+        "artist": "Jackson Pollock",
+        "year": "1950",
+        "description": "Chef-d'œuvre de l'expressionnisme abstrait américain, créé par la technique du dripping de Pollock, révolutionnant l'art moderne.",
+        "imageUrl": "assets/images/Lavender_Mist.jpg",
+        "position": {
+            "x": 5.9,
+            "y": 2,
+            "z": -12
+        },
+        "rotation": {
+            "x": 0,
+            "y": -1.5707963267948966,
+            "z": 0
+        },
+        "scale": {
+            "x": 2.6,
+            "y": 1.8,
+            "z": 1
+        }
+    }
+]

@@ -1,0 +1,21 @@
+[
+    {
+        "type": "sculpture",
+        "title": "Sculpture Personnalisée",
+        "artist": "Artiste Test",
+        "year": "2024",
+        "description": "Sculpture personnalisée importée depuis un fichier GLTF pour tester la fonctionnalité.",
+        "position": {
+            "x": 0,
+            "y": 0.3,
+            "z": -21
+        },
+        "modelUrl": "assets/sculptures/uploads_files_1848883_full_sculpture.gltf",
+        "scale": {
+            "x": 10,
+            "y": 10,
+            "z": 10
+        },
+        "color": "0x000000"
+    }
+]
