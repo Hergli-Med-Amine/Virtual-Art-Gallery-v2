@@ -4,14 +4,15 @@ import { LightingManager } from './js/LightingManager.js';
 import { MovementController } from './js/MovementController.js';
 import { ArtLoader } from './js/ArtLoader.js';
 import { UIManager } from './js/UIManager.js';
+import { ArtworkController } from './js/ArtworkController.js';
 
 class VirtualArtGallery {
     constructor() {
         this.sceneManager = null;
-        this.lightingManager = null;
-        this.movementController = null;
+        this.lightingManager = null;        this.movementController = null;
         this.artLoader = null;
         this.uiManager = null;
+        this.artworkController = null;
         this.isLoading = true;
     }
 
@@ -37,8 +38,15 @@ class VirtualArtGallery {
                 this.sceneManager.camera,
                 this.sceneManager.controls
             );
+              this.uiManager = new UIManager();
             
-            this.uiManager = new UIManager();
+            // Initialize artwork controller for interactive positioning
+            this.artworkController = new ArtworkController(
+                this.sceneManager.scene,
+                this.sceneManager.camera,
+                this.sceneManager.renderer,
+                this.artLoader
+            );
               // Load all content
             console.log('Loading gallery model...');
             await this.artLoader.loadGallery();
