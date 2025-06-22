@@ -7,18 +7,18 @@
         "description": "Cette œuvre emblématique de Van Gogh capture le mouvement du ciel nocturne avec des tourbillons expressifs et des couleurs vibrantes.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg",
         "position": {
-            "x": -5.9,
-            "y": 2,
-            "z": 3
+            "x": -6.6,
+            "y": 1.75,
+            "z": 4.74
         },
         "rotation": {
             "x": 0,
-            "y": 1.5707963267948966,
+            "y": 2.195,
             "z": 0
         },
         "scale": {
-            "x": 1.5,
-            "y": 1.2,
+            "x": 1.4,
+            "y": 1.1,
             "z": 1
         }
     },
@@ -30,13 +30,13 @@
         "description": "Portrait de Lisa Gherardini, épouse de Francesco del Giocondo. Célèbre pour son sourire énigmatique et la technique du sfumato.",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/687px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg",
         "position": {
-            "x": 5.9,
-            "y": 2,
-            "z": 3
+            "x": -3.3,
+            "y": 1.75,
+            "z": 7.4
         },
         "rotation": {
             "x": 0,
-            "y": -1.5707963267948966,
+            "y": 2.695,
             "z": 0
         },
         "scale": {

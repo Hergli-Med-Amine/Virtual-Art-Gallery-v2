@@ -283,8 +283,8 @@ export class ArtLoader {
             height: 0.45,            // Base height (higher = taller base)
             radialSegments: 32,     // Circle smoothness (higher = smoother)
             heightSegments: 1,      // Height segments (usually 1 is enough)
-            color: 0x909090,       // Light grey color (hex format)
-            roughness: 0.6,         // Material roughness (0 = mirror, 1 = rough)
+            color: 0xf0ede7,       // Light grey color (hex format)
+            roughness: 0,         // Material roughness (0 = mirror, 1 = rough)
             metalness: 0.1,         // Material metalness (0 = non-metal, 1 = metal)
             position: {
                 x: 0,               // X position (0 = center)

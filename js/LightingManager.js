@@ -60,69 +60,119 @@ export class LightingManager {
         this.lights.push({ type: 'fill', light: fillLight2 });
 
         // Point lights for interior
-        const pointLight1 = new THREE.PointLight(config.point.color, config.point.intensity, 20);
-        pointLight1.position.set(0, 8, 0);
-        this.scene.add(pointLight1);
-        this.lights.push({ type: 'point', light: pointLight1 });
+        // const pointLight1 = new THREE.PointLight(config.point.color, config.point.intensity, 20);
+        // pointLight1.position.set(0, 8, 0);
+        // this.scene.add(pointLight1);
+        // this.lights.push({ type: 'point', light: pointLight1 });
 
-        const pointLight2 = new THREE.PointLight(config.point.color, config.point.intensity, 20);
-        pointLight2.position.set(10, 6, 10);
-        this.scene.add(pointLight2);
-        this.lights.push({ type: 'point', light: pointLight2 });
+        // const pointLight2 = new THREE.PointLight(config.point.color, config.point.intensity, 20);
+        // pointLight2.position.set(10, 6, 10);
+        // this.scene.add(pointLight2);
+        // this.lights.push({ type: 'point', light: pointLight2 });
 
-        const pointLight3 = new THREE.PointLight(config.point.color, config.point.intensity, 20);
-        pointLight3.position.set(-10, 6, -10);
-        this.scene.add(pointLight3);
-        this.lights.push({ type: 'point', light: pointLight3 });
+        // const pointLight3 = new THREE.PointLight(config.point.color, config.point.intensity, 20);
+        // pointLight3.position.set(-10, 6, -10);
+        // this.scene.add(pointLight3);
+        // this.lights.push({ type: 'point', light: pointLight3 });
 
         console.log('Basic lighting setup complete');
+        
+        // Add circular point lights around the center
+        this.createCircularPointLights(
+            12,         // Number of lights
+            6.65,         // Radius from center
+            5,          // Light intensity
+            0xffffff,   // White color
+            3         // Height above ground
+        );
     }
 
-    createRingLight() {
-        // Ring Light Parameters - Modify these values to customize the ring
-        const ringRadius = 8;           // Radius of the ring (distance from center)
-        const ringThickness = 1.5;      // Thickness of the ring (how spread out the lights are)
-        const lightIntensity = 3.0;     // Intensity of each light in the ring (increased since we have fewer lights)
-        const numberOfLights = 8;       // Number of lights around the ring (reduced to avoid texture unit limit)
-        const ringHeight = 6;           // Height of the ring above ground
-        const lightColor = 0xffffff;    // Color of the ring lights (hex color)
-        const lightDistance = 30;       // How far each light reaches (increased to compensate)
-        const enableShadows = true;      // Toggle shadows on/off for performance
-        
-        // Create lights around the ring
-        for (let i = 0; i < numberOfLights; i++) {
-            const angle = (i / numberOfLights) * Math.PI * 2;
+    createCircularPointLights(numberOfLights = 8, radius = 10, intensity = 5, color = 0xffffff, height = 8) {
+        // Circular Point Lights Configuration
+        const circularConfig = {
+            numberOfLights: numberOfLights,    // Number of lights around the circle
+            radius: radius,                    // Radius of the circle (distance from center)
+            intensity: intensity,              // Light intensity for each point light
+            color: color,                      // Light color (hex format)
+            height: height,                    // Height position of the lights            distance: 25,                      // How far each light reaches
+            decay: 2,                          // Light decay rate (2 = realistic)
+            enableShadows: false,              // Shadows disabled for performance
+            pointDown: true,                   // Make lights point downward
+            showHelpers: true,                 // Show arrow helpers for light visualization
+            helperSize: 1,                     // Size of the arrow helpers
+            helperColor: 0xffff00              // Color of the arrow helpers (yellow)
+        };
+
+        console.log(`Creating ${circularConfig.numberOfLights} circular point lights at radius ${circularConfig.radius}`);
+
+        // Create lights distributed equally around the circle
+        for (let i = 0; i < circularConfig.numberOfLights; i++) {
+            // Calculate angle for equal distribution
+            const angle = (i / circularConfig.numberOfLights) * Math.PI * 2;
             
-            // Main ring position
-            const x = Math.cos(angle) * ringRadius;
-            const z = Math.sin(angle) * ringRadius;
-            
-            // Add some variation for thickness (random offset within thickness range)
-            const thicknessOffset = (Math.random() - 0.5) * ringThickness;
-            const finalX = x + Math.cos(angle + Math.PI/2) * thicknessOffset;
-            const finalZ = z + Math.sin(angle + Math.PI/2) * thicknessOffset;
+            // Calculate position on the circle
+            const x = Math.cos(angle) * circularConfig.radius;
+            const z = Math.sin(angle) * circularConfig.radius;
             
             // Create point light
-            const ringLight = new THREE.PointLight(lightColor, lightIntensity, lightDistance);
-            ringLight.position.set(finalX, ringHeight, finalZ);
+            const circularLight = new THREE.PointLight(
+                circularConfig.color, 
+                circularConfig.intensity, 
+                circularConfig.distance,
+                circularConfig.decay
+            );
             
-            // Only enable shadows for some lights to avoid texture unit limit
-            if (enableShadows && i % 2 === 0) { // Only every other light casts shadows
-                ringLight.castShadow = true;
+            // Position the light
+            circularLight.position.set(x, circularConfig.height, z);
+              // Shadows disabled for performance as requested
+            circularLight.castShadow = circularConfig.enableShadows;
+            
+            // Add arrow helper to visualize light position and direction
+            if (circularConfig.showHelpers) {
+                // Create arrow pointing downward from light position
+                const direction = new THREE.Vector3(0, -1, 0); // Point downward
+                const origin = new THREE.Vector3(x, circularConfig.height, z);
+                const length = circularConfig.helperSize;
                 
-                // Optimize shadow settings for performance
-                ringLight.shadow.mapSize.width = 256;  // Reduced from 512
-                ringLight.shadow.mapSize.height = 256; // Reduced from 512
-                ringLight.shadow.camera.near = 0.5;
-                ringLight.shadow.camera.far = lightDistance * 0.8; // Slightly reduced range
+                const arrowHelper = new THREE.ArrowHelper(
+                    direction,              // Direction vector (downward)
+                    origin,                 // Starting position
+                    length,                 // Length of arrow
+                    circularConfig.helperColor,  // Color of arrow
+                    length * 0.3,           // Head length (30% of total)
+                    length * 0.2            // Head width (20% of total)
+                );
+                
+                // Add helper to scene
+                this.scene.add(arrowHelper);
+                
+                // Store reference to helper for potential removal later
+                circularLight.helper = arrowHelper;
             }
             
-            this.scene.add(ringLight);
-            this.lights.push({ type: 'ring', light: ringLight });
+            // Make light point downward if specified
+            if (circularConfig.pointDown) {
+                // Point lights don't have direction, but we can add a target helper
+                // This is mainly for visual reference - point lights radiate in all directions
+                circularLight.target = new THREE.Vector3(x, 0, z); // Point toward ground
+            }
+            
+            // Add to scene and track
+            this.scene.add(circularLight);
+            this.lights.push({ 
+                type: 'circular', 
+                light: circularLight,
+                index: i,
+                angle: angle,
+                config: circularConfig
+            });
         }
         
-        console.log(`Ring light created with ${numberOfLights} lights at radius ${ringRadius}`);
-        console.log(`Shadow-casting lights: ${Math.ceil(numberOfLights/2)} (every other light)`);
+        console.log(`Circular lighting setup complete - ${circularConfig.numberOfLights} lights created`);
+        console.log(`Radius: ${circularConfig.radius}, Height: ${circularConfig.height}, Intensity: ${circularConfig.intensity}`);
+        console.log(`Shadows: ${circularConfig.enableShadows ? 'Enabled' : 'Disabled (for performance)'}`);
+        
+        return this.lights.filter(lightObj => lightObj.type === 'circular');
     }
 
     // Method to adjust light intensity by type
@@ -137,5 +187,26 @@ export class LightingManager {
     // Get all lights of a specific type
     getLightsByType(type) {
         return this.lights.filter(lightObj => lightObj.type === type);
+    }
+
+    // Method to toggle light helpers visibility
+    toggleLightHelpers(type = 'circular', visible = true) {
+        this.lights.forEach(lightObj => {
+            if (lightObj.type === type && lightObj.light.helper) {
+                lightObj.light.helper.visible = visible;
+            }
+        });
+        console.log(`Light helpers for ${type} lights: ${visible ? 'Visible' : 'Hidden'}`);
+    }
+
+    // Method to remove all light helpers
+    removeLightHelpers(type = 'circular') {
+        this.lights.forEach(lightObj => {
+            if (lightObj.type === type && lightObj.light.helper) {
+                this.scene.remove(lightObj.light.helper);
+                lightObj.light.helper = null;
+            }
+        });
+        console.log(`Light helpers removed for ${type} lights`);
     }
 }
