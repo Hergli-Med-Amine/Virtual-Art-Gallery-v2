@@ -183,7 +183,9 @@ export class ArtworkController {
         } else {
             this.deselectArtwork();
         }
-    } selectArtwork(artwork) {
+    } 
+    
+    selectArtwork(artwork) {
         // Only allow artwork selection in positioning mode
         if (!this.isPositioningMode) {
             console.log('❌ Cannot select artwork - not in positioning mode');
@@ -331,8 +333,8 @@ export class ArtworkController {
         this.modeButton.id = 'mode-toggle-button';
         this.modeButton.style.cssText = `
             position: fixed;
-            top: 20px;
-            right: 20px;
+            bottom: 20px;
+            left: 20px;
             padding: 12px 20px;
             background: #2196F3;
             color: white;

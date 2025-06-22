@@ -327,7 +327,7 @@ export class InspectionMode {    constructor(renderer, artLoader, sceneManager, 
         this.infoPanel.innerHTML = `
             <div class="artwork-header">
                 <h2>${data.title}</h2>
-                <h3>${data.artist}</h3>
+                <h3>By ${data.artist}</h3>
             </div>
             <div class="artwork-details">
                 <div class="detail-item">
