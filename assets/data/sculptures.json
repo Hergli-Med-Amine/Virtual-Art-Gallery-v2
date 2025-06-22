@@ -7,15 +7,15 @@
         "description": "Sculpture personnalisée importée depuis un fichier GLTF pour tester la fonctionnalité.",
         "position": {
             "x": 0,
-            "y": 0.3,
-            "z": -21
+            "y": 1,
+            "z": 0
         },
-        "modelUrl": "assets/sculptures/uploads_files_1848883_full_sculpture.gltf",
+        "modelUrl": "assets/models/uploads_files_1848883_full_sculpture.gltf",
         "scale": {
-            "x": 10,
-            "y": 10,
-            "z": 10
+            "x": 20,
+            "y": 20,
+            "z": 20
         },
-        "color": "0x000000"
+        "color": "0xf0ede7"
     }
 ]

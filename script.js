@@ -7,6 +7,11 @@ let scene, camera, renderer, controls;
 let gallery, mixer;
 let clock = new THREE.Clock();
 
+// Art loading variables
+let artworks = [];
+let sculptures = [];
+let loadedArtCount = 0;
+
 // FPS tracking
 let frameCount = 0;
 let lastTime = 0;
@@ -59,10 +64,11 @@ function init() {
     controls.enableKeys = false;
 
     // Add lights
-    setupLighting();
-
-    // Load GLB model
-    loadGallery();    // Setup event listeners
+    setupLighting();    // Load GLB model
+    loadGallery();
+    
+    // Load artwork after gallery is loaded
+    loadArtworks();// Setup event listeners
     setupEventListeners();
 
     // Hide loading
@@ -216,9 +222,177 @@ function optimizeMaterial(material) {
     if (material.transparent || material.opacity < 1) {
         material.transparent = true;
     }
-    
-    // Ensure materials are updated
+      // Ensure materials are updated
     material.needsUpdate = true;
+}
+
+// Art Loading System
+async function loadArtworks() {
+    try {
+        // Load paintings and sculptures data
+        const [paintingsResponse, sculpturesResponse] = await Promise.all([
+            fetch('assets/data/paintings.json'),
+            fetch('assets/data/sculptures.json')
+        ]);
+        
+        const paintings = await paintingsResponse.json();
+        const sculptures = await sculpturesResponse.json();
+        
+        console.log('Loaded artwork data:', { paintings: paintings.length, sculptures: sculptures.length });
+        
+        // Load sculptures first (only the first one for now)
+        if (sculptures.length > 0) {
+            loadSculpture(sculptures[0]);
+        }
+        
+        // Load paintings
+        paintings.forEach((painting, index) => {
+            loadPainting(painting, index);
+        });
+        
+    } catch (error) {
+        console.error('Error loading artwork data:', error);
+    }
+}
+
+function loadSculpture(sculptureData) {
+    const loader = new GLTFLoader();
+    
+    console.log('Loading sculpture:', sculptureData.title);
+    
+    loader.load(
+        sculptureData.modelUrl,
+        function(gltf) {
+            const sculpture = gltf.scene;
+            
+            // Apply position from JSON
+            sculpture.position.set(
+                sculptureData.position.x,
+                sculptureData.position.y,
+                sculptureData.position.z
+            );
+            
+            // Apply scale from JSON
+            sculpture.scale.set(
+                sculptureData.scale.x,
+                sculptureData.scale.y,
+                sculptureData.scale.z
+            );
+            
+            // Apply color if specified
+            if (sculptureData.color) {
+                sculpture.traverse(function(node) {
+                    if (node.isMesh) {
+                        if (node.material) {
+                            if (Array.isArray(node.material)) {
+                                node.material.forEach(mat => {
+                                    mat.color.setHex(sculptureData.color);
+                                });
+                            } else {
+                                node.material.color.setHex(sculptureData.color);
+                            }
+                        }
+                        // Enable shadows
+                        node.castShadow = true;
+                        node.receiveShadow = true;
+                    }
+                });
+            }
+            
+            scene.add(sculpture);
+            sculptures.push({
+                object: sculpture,
+                data: sculptureData
+            });
+            
+            console.log(`Sculpture "${sculptureData.title}" loaded successfully`);
+        },
+        function(progress) {
+            console.log('Sculpture loading progress:', Math.round((progress.loaded / progress.total) * 100) + '%');
+        },
+        function(error) {
+            console.error('Error loading sculpture:', error);
+        }
+    );
+}
+
+function loadPainting(paintingData, index) {
+    const textureLoader = new THREE.TextureLoader();
+    
+    console.log('Loading painting:', paintingData.title);
+    
+    textureLoader.load(
+        paintingData.imageUrl,
+        function(texture) {
+            // Create painting geometry (plane)
+            const geometry = new THREE.PlaneGeometry(1, 1);
+            
+            // Create material with the loaded texture
+            const material = new THREE.MeshLambertMaterial({
+                map: texture,
+                side: THREE.DoubleSide
+            });
+            
+            // Create mesh
+            const painting = new THREE.Mesh(geometry, material);
+            
+            // Apply position from JSON
+            painting.position.set(
+                paintingData.position.x,
+                paintingData.position.y,
+                paintingData.position.z
+            );
+            
+            // Apply rotation from JSON
+            painting.rotation.set(
+                paintingData.rotation.x,
+                paintingData.rotation.y,
+                paintingData.rotation.z
+            );
+            
+            // Apply scale from JSON
+            painting.scale.set(
+                paintingData.scale.x,
+                paintingData.scale.y,
+                paintingData.scale.z
+            );
+            
+            // Enable shadows
+            painting.castShadow = true;
+            painting.receiveShadow = true;
+            
+            // Add to scene
+            scene.add(painting);
+            
+            // Store reference
+            artworks.push({
+                object: painting,
+                data: paintingData
+            });
+            
+            loadedArtCount++;
+            console.log(`Painting "${paintingData.title}" loaded (${loadedArtCount})`);
+        },
+        function(progress) {
+            // Loading progress
+        },
+        function(error) {
+            console.error(`Error loading painting "${paintingData.title}":`, error);
+        }
+    );
+}
+
+// Function to get artwork info (useful for interaction later)
+function getArtworkInfo(object) {
+    // Check if it's a painting
+    const painting = artworks.find(art => art.object === object);
+    if (painting) return painting.data;
+    
+    // Check if it's a sculpture
+    const sculpture = sculptures.find(art => art.object === object);
+    if (sculpture) return sculpture.data;
+    
+    return null;
 }
 
 function setupEventListeners() {

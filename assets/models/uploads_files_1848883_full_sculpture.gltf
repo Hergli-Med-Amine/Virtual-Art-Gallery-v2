@@ -1,0 +1,87 @@
+{
+    "asset": {
+        "generator": "3D Builder",
+        "version": "2.0"
+    },
+    "scene": 0,
+    "scenes": [
+        {
+            "nodes": [0]
+        }
+    ],
+    "nodes": [
+        {
+            "mesh": 0,
+            "matrix": [
+                0.9999999403953552, 0, 0, 0,
+                0, -1.1920928244535389e-7, -0.9999998211860657, 0,
+                0, 0.9999998211860657, -1.1920928244535389e-7, 0,
+                -0.06, 0, 0.05, 1
+            ],
+            "translation": [10, 10, 20]
+        }
+    ],
+    "meshes": [
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "POSITION": 0
+                    },
+                    "mode": 4,
+                    "indices": 1,
+                    "material": 0
+                }
+            ]
+        }
+    ],
+    "materials": [
+        {
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [0.85, 0.85, 0.88, 1.0],
+                "metallicFactor": 0.1,
+                "roughnessFactor": 0.3
+            },
+            "name": "MarbleGreyMaterial"
+        }
+    ],
+    "accessors": [
+        {
+            "bufferView": 0,
+            "byteOffset": 0,
+            "count": 500120,
+            "componentType": 5126,
+            "type": "VEC3",
+            "min": [0.026971502229571342, 0.018260600045323372, 0],
+            "max": [0.17302951216697693, 0.18173663318157196, 0.21935802698135376]
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 0,
+            "count": 3005382,
+            "componentType": 5125,
+            "type": "SCALAR"
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 6001440,
+            "byteStride": 12,
+            "target": 34962
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 6001440,
+            "byteLength": 12021528,
+            "target": 34963
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 18022968,
+            "uri": "uploads_files_1848883_full_sculpture.bin"
+        }
+    ]
+}
