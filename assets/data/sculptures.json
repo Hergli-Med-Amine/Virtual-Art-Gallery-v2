@@ -1,21 +1,21 @@
 [
     {
         "type": "sculpture",
-        "title": "Sculpture Personnalisée",
-        "artist": "Artiste Test",
-        "year": "2024",
-        "description": "Sculpture personnalisée importée depuis un fichier GLTF pour tester la fonctionnalité.",
+        "title": "Winged Victory",
+        "artist": "Unkown",
+        "year": "190 BC",
+        "description": "most commonly refers to the Winged Victory of Samothrace, a famous Greek sculpture depicting the goddess Nike alighting on a ship's prow. It's a masterpiece of Hellenistic sculpture, known for its dramatic pose and flowing drapery, conveying a sense of movement and triumph.",
         "position": {
             "x": 0,
-            "y": 0.3,
-            "z": -21
+            "y": 0.45,
+            "z": 0
         },
-        "modelUrl": "assets/sculptures/uploads_files_1848883_full_sculpture.gltf",
+        "modelUrl": "assets/models/uploads_files_1848883_full_sculpture.gltf",
         "scale": {
-            "x": 10,
-            "y": 10,
-            "z": 10
+            "x": 20,
+            "y": 20,
+            "z": 20
         },
-        "color": "0x000000"
+        "color": "0xf0ede7"
     }
 ]
