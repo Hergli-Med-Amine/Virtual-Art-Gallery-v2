@@ -82,15 +82,15 @@ export class ArtLoader {
         const box = new THREE.Box3().setFromObject(this.gallery);
         const center = box.getCenter(new THREE.Vector3());
         
-        // Position camera at the center of the gallery at human height
-        this.camera.position.set(center.x, center.y - 1, center.z);
+        // Position camera to the left of the center of the gallery at human height
+        this.camera.position.set(center.x - 4, center.y - 1, center.z);
         this.camera.lookAt(center.x, center.y - 1, center.z + 1);
         
         // Update controls target to be at eye level
         this.controls.target.set(center.x, center.y - 1, center.z + 1);
         this.controls.update();
         
-        console.log('Spawned at center:', center);
+        console.log('Spawned to the left of center:', center);
     }
 
     async loadArtworks() {

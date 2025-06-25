@@ -24,7 +24,7 @@ export class SceneManager {
             0.1, 
             1000
         );
-        this.camera.position.set(0, 5, 10);
+        this.camera.position.set(-5, 5, 10);
 
         // Create renderer
         this.renderer = new THREE.WebGLRenderer({ antialias: true });

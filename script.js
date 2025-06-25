@@ -10,7 +10,8 @@ import { InspectionMode } from './js/InspectionMode.js';
 class VirtualArtGallery {
     constructor() {
         this.sceneManager = null;
-        this.lightingManager = null;        this.movementController = null;
+        this.lightingManager = null;
+        this.movementController = null;
         this.artLoader = null;
         this.uiManager = null;
         this.artworkController = null;
@@ -22,25 +23,25 @@ class VirtualArtGallery {
         try {
             // Show loading screen
             document.getElementById('loading').style.display = 'flex';
-            
+
             // Initialize core managers
             this.sceneManager = new SceneManager();
             this.sceneManager.init();
-            
+
             this.lightingManager = new LightingManager(this.sceneManager.scene);
             this.lightingManager.setupLighting();
-            
+
             this.movementController = new MovementController(
-                this.sceneManager.camera, 
+                this.sceneManager.camera,
                 this.sceneManager.controls
             );
-            
+
             this.artLoader = new ArtLoader(
                 this.sceneManager.scene,
                 this.sceneManager.camera,
                 this.sceneManager.controls
             );
-              this.uiManager = new UIManager();            // Initialize artwork controller for interactive positioning
+            this.uiManager = new UIManager();            // Initialize artwork controller for interactive positioning
             this.artworkController = new ArtworkController(
                 this.sceneManager.scene,
                 this.sceneManager.camera,
@@ -56,35 +57,35 @@ class VirtualArtGallery {
 
             // Set up bidirectional reference
             this.artworkController.setInspectionMode(this.inspectionMode);
-              // Load all content
+            // Load all content
             console.log('Loading gallery model...');
             await this.artLoader.loadGallery();
-            
+
             console.log('Loading artworks...');
             await this.artLoader.loadArtworks();
-            
+
             // Hide loading screen
             this.isLoading = false;
             document.getElementById('loading').style.display = 'none';
-            
+
             console.log('Gallery loaded successfully!');
-            
+
         } catch (error) {
             console.error('Error initializing gallery:', error);
             document.getElementById('loading').innerHTML = '<p>Error loading gallery. Please refresh.</p>';
         }
-    }    
-    
+    }
+
     animate() {
         requestAnimationFrame(() => this.animate());
-        
+
         if (this.isLoading) return;
-        
+
         const deltaTime = this.sceneManager.clock.getDelta();
         const currentTime = performance.now();
-          // Check if we're in inspection mode
+        // Check if we're in inspection mode
         const isInspecting = this.inspectionMode?.isActive || false;
-        
+
         if (isInspecting) {
             // Inspection mode - update and render inspection scene
             this.inspectionMode.update();
@@ -92,19 +93,19 @@ class VirtualArtGallery {
         } else {
             // Normal gallery mode - update movement and render main scene
             this.movementController.handleMovement(deltaTime);
-            
+
             // Update controls
             this.sceneManager.controls.update();
-            
+
             // Update mixer for animations
             if (this.artLoader.mixer) {
                 this.artLoader.mixer.update(deltaTime);
             }
-            
+
             // Update UI
             this.uiManager.updateFPS(currentTime);
             this.uiManager.updateTriangleCount(this.artLoader.gallery);
-            
+
             // Render main scene
             this.sceneManager.renderer.render(this.sceneManager.scene, this.sceneManager.camera);
         }
